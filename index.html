@@ -226,7 +226,7 @@ nav {
 .cta-buttons {
   display: flex;
   gap: 20px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
 }
 
 .btn {
@@ -955,7 +955,7 @@ footer {
 </section>
 
 <!-- VIDEO SHOWCASE -->
-<section class="video-showcase">
+<!--<section class="video-showcase">
   <div class="section-header fade-in">
     <h2 class="section-title">Work in Motion</h2>
     <p class="section-subtitle">See my projects come to life</p>
@@ -968,7 +968,7 @@ footer {
     </video>
   </div>
   <p class="video-caption fade-in">Demo of my latest project showcase</p>
-</section>
+</section>-->
 
 <!-- PROJECTS SECTION -->
 <section id="projects" class="section">
@@ -1101,8 +1101,8 @@ footer {
       <div class="form-group">
         <textarea placeholder="Your Message" required></textarea>
       </div>
-      <button type="submit" class="submit-btn">Send Email</button>
-      <a href="https://wa.me/94769995512" target="_blank" class="submit-btn whatsapp-btn" style="display: inline-block; text-align: center; text-decoration: none; margin-top: 15px; background: #25D366;">💬 Send WhatsApp Message</a>
+      <!-- <button type="submit" class="submit-btn">Send Email</button> -->
+      <button type="submit" class="submit-btn whatsapp-btn" style="background: #25D366;">💬 Send WhatsApp Message</button>
     </form>
   </div>
 </section>
@@ -1204,13 +1204,24 @@ if (profileCard) {
 // FORM SUBMISSION
 function handleSubmit(e) {
   e.preventDefault();
-  const formData = new FormData(e.target);
-  const name = formData.get('name') || 'there';
-  const email = formData.get('email');
-  const message = formData.get('message');
   
-  // Send email (you can integrate with a service like EmailJS or Formspree)
-  alert('Thank you for your message! I\'ll get back to you soon.');
+  // Get form data
+  const name = e.target.querySelector('input[placeholder="Your Name"]').value;
+  const email = e.target.querySelector('input[placeholder="Your Email"]').value;
+  const subject = e.target.querySelector('input[placeholder="Subject"]').value;
+  const message = e.target.querySelector('textarea').value;
+  
+  // Format message for WhatsApp
+  const whatsappMessage = `*New Contact Form Submission*%0A%0A` +
+    `*Name:* ${encodeURIComponent(name)}%0A` +
+    `*Email:* ${encodeURIComponent(email)}%0A` +
+    `*Subject:* ${encodeURIComponent(subject)}%0A` +
+    `*Message:* ${encodeURIComponent(message)}`;
+  
+  // Open WhatsApp with pre-filled message
+  window.open(`https://wa.me/94769995512?text=${whatsappMessage}`, '_blank');
+  
+  // Reset form
   e.target.reset();
 }
 
