@@ -146,6 +146,37 @@ nav {
   width: 100%;
 }
 
+/* MOBILE MENU TOGGLE */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 1001;
+  padding: 10px;
+}
+
+.menu-toggle span {
+  width: 30px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(8px, -8px);
+}
+
 /* HERO SECTION */
 .hero {
   position: relative;
@@ -707,8 +738,49 @@ footer {
     padding: 20px 30px;
   }
 
+  .menu-toggle {
+    display: flex;
+  }
+
   .nav-links {
-    gap: 20px;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background: var(--surface);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    border-left: 2px solid var(--accent);
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .nav-links li {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 0.3s ease;
+  }
+
+  .nav-links.active li {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .nav-links.active li:nth-child(1) { transition-delay: 0.1s; }
+  .nav-links.active li:nth-child(2) { transition-delay: 0.2s; }
+  .nav-links.active li:nth-child(3) { transition-delay: 0.3s; }
+  .nav-links.active li:nth-child(4) { transition-delay: 0.4s; }
+
+  .nav-links a {
+    font-size: 1.2rem;
   }
 
   .hero {
@@ -855,7 +927,12 @@ footer {
     <img src="images/dynalink-logo.png" alt="DynaLink Logo">
     <span>DynaLink</span>
   </div>
-  <ul class="nav-links">
+  <div class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul class="nav-links" id="navLinks">
     <li><a href="#home">Home</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#projects">Projects</a></li>
@@ -1136,6 +1213,33 @@ document.addEventListener('mousemove', (e) => {
     follower.style.top = e.clientY + 'px';
   }, 100);
 });
+
+// MOBILE MENU TOGGLE
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    navLinks.classList.toggle('active');
+  });
+
+  // Close menu when clicking on a link
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+      menuToggle.classList.remove('active');
+      navLinks.classList.remove('active');
+    }
+  });
+}
 
 // SMOOTH SCROLLING
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
